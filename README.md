@@ -1,17 +1,17 @@
-# Web Development Project 7 - *Name of App Here*
+# Web Development Project 7 - *History Hub*
 
-Submitted by: **Your Name Here**
+Submitted by: **Damaris Campos**
 
-This web app: **insert description**
+This web app: **This project displays a list of crewmates with their titles, creation dates, and upvote counts. Users can interact with the crewmates' posts by clicking an "Upvote" button to increment the number of upvotes. Each post also has a "View More" button that links to a detailed page for more information about that crewmate.**
 
-Time spent: **X** hours spent in total
+Time spent: **5** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [ ] **A create form allows users to add new cremates**
-- [ ] **Users can name the crewmate and set the crewmate's attributes by clicking on one of several values**
+- [x] **A create form allows users to add new crewmates**
+- [x] **Users can name the crewmate and set the crewmate's attributes by clicking on one of several values**
 - [ ] **The site displays a summary page of all the user's added crewmates**
 - [ ] **A previously created crewmate can be updated from the crewmate list**
 - [ ] **A previously created crewmate can be deleted from the crewmate list**

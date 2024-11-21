@@ -1,65 +1,65 @@
 import './App.css';
-import React from 'react';
-import { useRoutes } from 'react-router-dom'
-import ReadPosts from './pages/ReadPosts'
-import CreatePost from './pages/CreatePost'
-import EditPost from './pages/EditPost'
-import { Link } from 'react-router-dom'
-
+import React, { useState, useEffect } from 'react';
+import { useRoutes, Link } from 'react-router-dom';
+import ReadCrewmates from './pages/ReadCrewmate';
+import CreateCrewmate from './pages/CreateCrewmate';
+import EditCrewmate from './pages/EditCrewmate';
+import InfoCrewmate from './pages/InfoCrewmate';
+import { supabase } from './client'; // Ensure supabase client is imported
+import UniqueCrewmate from './pages/UniqueCrewmate';
 
 const App = () => {
-  
-  const descr = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+  const [crewmates, setCrewmates] = useState([]);
 
-  const posts = [
-      {'id':'1', 
-      'title': 'Cartwheel in Chelsea 🤸🏽‍♀️',
-      'author':'Harvey Milian', 
-      'description': descr},
-      {'id':'2', 
-      'title': 'Love Lock in Paris 🔒',
-      'author':'Beauford Delaney', 
-      'description':descr},
-      {'id':'3', 
-      'title': 'Wear Pink on Fridays 🎀',
-      'author':'Onika Tonya', 
-      'description':descr},
-      {'id':'4', 
-      'title': 'Adopt a Dog 🐶',
-      'author':'Denise Michelle', 
-      'description':descr},
-  ]
- 
+  const fetchCrewmates = async () => {
+    const { data, error } = await supabase
+      .from('Posts')
+      .select()
+      .order('created_at', { ascending: true });
 
-  // Sets up routes
-  let element = useRoutes([
-    {
-      path: "/",
-      element:<ReadPosts data={posts}/>
-    },
-    {
-      path:"/edit/:id",
-      element: <EditPost data={posts} />
-    },
-    {
-      path:"/new",
-      element: <CreatePost />
+    if (error) {
+      console.error('Error fetching posts:', error);
+    } else {
+      setCrewmates(data);
     }
+  };
+
+  useEffect(() => {
+    fetchCrewmates(); // Fetch crewmates on mount
+  }, []);
+
+  const addCrewmate = (newCrewmate) => {
+    setCrewmates((prevCrewmates) => [...prevCrewmates, newCrewmate]);
+  };
+
+  let element = useRoutes([
+    { path: "/", element: <ReadCrewmates crewmates={crewmates} /> },
+    { path: "/edit/:id", element: <EditCrewmate data={crewmates} /> },
+    { path: "/new", element: <CreateCrewmate addCrewmate={addCrewmate} fetchCrewmates={fetchCrewmates} /> },
+    { path: "/crewmate/:id", element: <UniqueCrewmate crewmates={crewmates} /> },
   ]);
 
-  return ( 
-
+  return (
     <div className="App">
-
-      <div className="header">
-        <h1>👍 Bet 1.0</h1>
-        <Link to="/"><button className="headerBtn"> Explore Challenges 🔍  </button></Link>
-        <Link to="/new"><button className="headerBtn"> Submit Challenge 🏆 </button></Link>
+      <div className="navbar">
+        <div className="navbar-left">
+          <h1>HistoryHub</h1>
+        </div>
+        <div className="navbar-center">
+          <input type="text" placeholder="Search..." className="search-bar" />
+        </div>
+        <div className="navbar-right">
+          <Link to="/">
+            <button className="nav-btn">Home</button>
+          </Link>
+          <Link to="/new">
+            <button className="nav-btn">Create New Post</button>
+          </Link>
+        </div>
       </div>
-        {element}
+      {element}
     </div>
-
   );
-}
+};
 
 export default App;
